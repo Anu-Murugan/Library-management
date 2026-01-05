@@ -1,25 +1,23 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const path = require("path");
 const bookRoutes = require("./routes/bookRoutes");
 
 const app = express();
 
-// VERY IMPORTANT
+// Parse JSON
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/libraryDB")
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+// Serve frontend files
+app.use(express.static(path.join(__dirname, "public")));
 
-// Routes
+// API routes
 app.use("/books", bookRoutes);
 
-// Test route
+// Server test
 app.get("/", (req, res) => {
-  res.send("Server is running");
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(3000, () => {
-  console.log("Server started on port 3000");
+    console.log("Server started on http://localhost:3000");
 });
